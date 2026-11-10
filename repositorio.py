@@ -5,7 +5,7 @@ engine = create_engine("sqlite:///:memory:", echo=True)
 Base = declarative_base()
 
 class Estudiante(Base):
-    _tablename_ = "estudiantes"
+    __tablename__ = "estudiantes"
     id = Column(Integer, primary_key=True)
     nombre = Column(String)
 
@@ -13,7 +13,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
 class EstudianteRepository:
-    def _init_(self, session):
+    def __init__(self, session):
         self.session = session
 
     def guardar(self, nombre):
@@ -25,7 +25,7 @@ class EstudianteRepository:
 
 with Session() as session:
     repo = EstudianteRepository(session)
-    repo.guardar("Carlos")
+    repo.guardar("Samuel")
     for e in repo.consultar():
         print(e.id, e.nombre)
     
