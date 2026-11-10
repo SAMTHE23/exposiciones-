@@ -1,2 +1,31 @@
+from sqlalchemy import create_engine, Column, Integer, String, select
+from sqlalchemy.orm import declarative_base, sessionmaker
 
+engine = create_engine("sqlite:///:memory:", echo=True)
+Base = declarative_base()
+
+class Estudiante(Base):
+    _tablename_ = "estudiantes"
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+class EstudianteRepository:
+    def _init_(self, session):
+        self.session = session
+
+    def guardar(self, nombre):
+        self.session.add(Estudiante(nombre=nombre))
+        self.session.commit()
+
+    def consultar(self):
+        return self.session.scalars(select(Estudiante)).all()
+
+with Session() as session:
+    repo = EstudianteRepository(session)
+    repo.guardar("Carlos")
+    for e in repo.consultar():
+        print(e.id, e.nombre)
     

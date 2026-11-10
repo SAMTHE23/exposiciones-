@@ -1,9 +1,19 @@
-import json
+class EdadError(Exception):
+    pass
 
-persona = {"nombre": "Ana", "edad": 20}
+try:
+    edad = int(input("Ingresa tu edad: "))
 
-texto = json.dumps(persona)
-print(texto, type(texto))
+    if edad < 0:
+        raise EdadError("La edad no puede ser negativa")
 
-objeto = json.loads(texto)
-print(objeto, type(objeto))
+    if edad < 18:
+        raise EdadError("Debes ser mayor de edad")
+
+    print("Puedes ingresar")
+
+except EdadError as error:
+    print("Error:", error)
+
+except ValueError:
+    print("Debes ingresar un número")
